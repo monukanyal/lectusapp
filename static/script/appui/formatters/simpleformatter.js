@@ -28,16 +28,20 @@ define(
     "antie/formatter",
     "antie/widgets/label",
     "antie/widgets/button",
-    "antie/widgets/image"
+    "antie/widgets/image",
+    "sampleapp/appui/components/simple"
   ],
-  function(Formatter, Label, Button, Image) {
+  function(Formatter, Label, Button, Image , Simple) {
     return Formatter.extend({
       format : function (iterator) {
         var button, item;
         item = iterator.next();
-        button = new Button("fruit" + item.id);
-        button.appendChildWidget(new Image("img-item.id", item.img, { width : 200, height: 200}));
-        button.appendChildWidget(new Label(item.title));
+        button = new Button("fruit" + item.genre);
+        button.appendChildWidget(new Image("img-item", "static/img/fruit/apple.png" , { width : 200, height: 200}));
+        button.appendChildWidget(new Label(item.genre));
+        button.addEventListener('select', function(evt) {
+          // alert("Genre :"+item.genre);
+        });
         return button;
       }
     });

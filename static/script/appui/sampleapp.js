@@ -47,8 +47,6 @@ define(
       run: function() {
         // Called from run() as we need the framework to be ready beforehand.
         this._setRootContainer();
-
-        // Create maincontainer and add simple component to it
         this.addComponentContainer("maincontainer", "sampleapp/appui/components/simple");
       }
     });

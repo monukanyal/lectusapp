@@ -13,10 +13,10 @@ define(
     "antie/widgets/carousel/strips/hidingstrip"
   ],
   function (Component, DataSource, Label, Carousel, Binder, ActivateFirstHandler, WrappingStrip,
-    WrappingNavigator, CullingStrip, HidingStrip) {
+    WrappingNavigator, CullingStrip, HidingStrip){
     'use strict';
 
-    function evtBind(self, functionName) {
+    function evtBind(self, functionName){
       return function (evt) {
         self[functionName].call(self, evt);
       };
@@ -26,13 +26,16 @@ define(
       init: function init () {
         init.base.call(this, 'carouselComponent');
 
+        this._application = this.getCurrentApplication();
+        this._device = this._application.getDevice();
+
         this._addComponentListeners();
         this._description = new Label();
         this._description.addClass('description');
         this.appendChildWidget(this._description);
       },
 
-      onBeforeShow: function (evt) {
+      onBeforeShow: function (evt){
         this._initialItem = evt.args.initialItem || 0;
         this._dontShowYet(evt);
         this.setDescription(evt.args.description || "");
@@ -44,17 +47,17 @@ define(
         this._startCarouselDataBinding(evt);
       },
 
-      onAfterHide: function (evt) {
+      onAfterHide: function (evt){
         this._tearDownCarousel();
         this.removeChildWidget(this._carousel);
         this._carousel = null;
       },
 
-      onSelect: function (evt) {
+      onSelect: function (evt){
         this._goBack();
       },
 
-      onDataBound: function (evt) {
+      onDataBound: function (evt){
         // In practice you might set widget lengths from data source rather then component args
         // and do it during a bind per widget (on append), however if you're doing it in a block
         // this is where it needs to happen (post bind, pre align)
@@ -168,7 +171,6 @@ define(
 
       _startCarouselDataBinding: function (evt) {
         var dataSource, formatter, binder;
-
         // disabling auto calc is to prevent wrapping strips from
         // creating clones multiple times during a large data bind
         this._carousel.autoCalculate(false);

@@ -34,7 +34,7 @@ body {
     font-family: "Helvetica", sans-serif;
     font-weight: lighter;
     color: #d4d4d4;
-    background-color: #000000;
+    background-color: #002333;
 }
 
 object {
@@ -44,7 +44,7 @@ object {
 /* Loading screen */
 #static-loading-screen {
     position: absolute;
-    margin-top: 100px;
+    /**margin-top: 100px;**/
     z-index: 100;
     width: 100%;
 }
@@ -190,11 +190,11 @@ initial element background in the base stylesheet, not in dynamically loaded sty
 .description {
     text-align: center;
     display: block;
-    position: absolute;
+   position: absolute;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1;
-    padding: 8px 0px;
+    top: 0%;
 }
 
 #testPlayer {
@@ -206,7 +206,7 @@ initial element background in the base stylesheet, not in dynamically loaded sty
     height: 720px;
 }
 
-#playerButtons {
+#SettingsButtons , #LoginButtons , #HomeButtons {
     z-index: 1;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.5);
@@ -216,12 +216,28 @@ initial element background in the base stylesheet, not in dynamically loaded sty
     color: #000000;
 }
 
-#playerButtons .button {
+#SettingsButtons .button {
     width: 75px;
     padding: 10px;
     text-align: center;
     margin: 5px;
 }
+
+#LoginButtons .button {
+    width: 75px;
+    padding: 10px;
+    text-align: center;
+    margin: 5px;
+}
+
+#HomeButtons .button {
+    width: 290px;
+    padding: 10px;
+    text-align: center;
+    margin: 5px;
+    display: inline-table;
+}
+
 
 /* Display & Visibility Helpers */
 .display-none {
@@ -239,6 +255,7 @@ initial element background in the base stylesheet, not in dynamically loaded sty
 .carouselwidgetstrip {
     position: relative;
     white-space: nowrap;
+    margin-top: 70px;
 }
 
 .carouselwidgetstrip.vertical > .carouselItem {
@@ -263,8 +280,8 @@ initial element background in the base stylesheet, not in dynamically loaded sty
 }
 
 .carouselwidgetstrip > .button {
-    margin: 0;
-    width: 200px;
+    margin: 0 10px 0 0;
+    width: 342px;
     padding: 32px;
 }
 
@@ -289,3 +306,121 @@ initial element background in the base stylesheet, not in dynamically loaded sty
     background: #777;
     position: relative;
 }
+
+/** 2/11/2017 **/
+#splashscreen{
+    background-image: url(../img/SPLASH.png);
+    height: 700px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+div#maincontainer {
+    height: 500px;
+    display: table;
+    width: 100%;
+}
+div#logincomponent {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    height: 500px;
+}
+div#settingcomponent{
+     display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+span#UserLabel, span#PasswordLabel, span#IPLabel {
+    margin-bottom: 50px;
+}
+div#settingcomponent span {
+    display: block;
+    padding: 0px 10px 0px 10px;
+   
+}
+span#IPLabel{
+     font-size: 40px;
+    color: #b2b3b3;
+    padding: 20px;
+    display: block;
+}
+span#UserLabel input, span#PasswordLabel input {
+    height: 32px;
+    width: 200px;
+    font-size: 15px;
+    border: none;
+    background: #093e56;
+    padding: 10px;
+    border-radius: 4px;
+}
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: pink;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: pink;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: pink;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: pink;
+}
+div#MovieMainVertical {
+    position: relative;
+    top: -500px;
+    width: fit-content;
+}
+[id^="Category_"],
+[id*="Category_"] {
+  display: block !important;
+    /*background: transparent;*/
+    width: 100% !important;
+    overflow: hidden;
+    margin: 0 auto;
+    max-width: fit-content;
+}
+[id^="singleMovie_"],
+[id*="singleMovie_"] {
+  display: inline-block !important;
+    width: 200px !important;
+    vertical-align: top;
+    /*background-color: transparent;*/
+}
+span#category_list {
+    font-size: 25px;
+    color: #fff;
+    display: flex;
+}
+
+/** New **/
+.tmdb-item.button {
+    background-color: transparent;
+}
+
+.tmdb-item.button.focus {
+    background-color: #081c24;
+    border: 2px solid #01d277;
+}
+
+.tmdb-item span {
+    position: absolute;
+    background-color: rgba(210, 210, 210, 0.9);
+    display: block;
+    margin: 0;
+    padding: 0;
+    height: 55px;
+    bottom: 0;
+    width: 342px;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 32px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+
+
+

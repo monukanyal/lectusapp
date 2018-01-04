@@ -1,121 +1,100 @@
-/**
-* @preserve Copyright (c) 2013 British Broadcasting Corporation
-* (http://www.bbc.co.uk) and TAL Contributors (1)
-*
-* (1) TAL Contributors are listed in the AUTHORS file and at
-*     https://github.com/fmtvp/TAL/AUTHORS - please extend this file,
-*     not this notice.
-*
-* @license Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*
-* All rights reserved
-* Please contact us for an alternative licence
-*/
-
 define(
   "sampleapp/appui/components/simple",
   [
     "antie/widgets/component",
+    "antie/widgets/componentcontainer",
     "antie/widgets/button",
     "antie/widgets/label",
     "antie/widgets/verticallist",
     "antie/widgets/carousel",
     "antie/datasource",
+    'antie/runtimecontext',
     "sampleapp/appui/formatters/simpleformatter",
     "sampleapp/appui/datasources/simplefeed"
   ],
-  function (Component, Button, Label, VerticalList, Carousel, DataSource, SimpleFormatter, SimpleFeed) {
+  function (Component, ComponentContainer , Button, Label, VerticalList, Carousel, DataSource, RuntimeContext,SimpleFormatter, SimpleFeed) {
+    'use strict';
+        
+    var app = RuntimeContext.getCurrentApplication(),device = RuntimeContext.getDevice();
 
-    // All components extend Component
     return Component.extend({
       init: function init () {
-        var self, helloWorldLabel, welcomeLabel, carouselButtonLabel, verticalListMenu;
-
-        self = this;
-
         // It is important to call the constructor of the superclass
         init.base.call(this, "simplecomponent");
 
-        // Add the labels to the component
-        helloWorldLabel = new Label("helloWorldLabel", "Hello World");
-        this.appendChildWidget(helloWorldLabel);
+        // component events
+        this._onLoad && this.addEventListener('load', this._onLoad.bind(this));
+        this._onBeforeRender && this.addEventListener('beforerender', this._onBeforeRender.bind(this));
+        this._onBeforeShow && this.addEventListener('beforeshow', this._onBeforeShow.bind(this));
+        this._onAfterShow && this.addEventListener('aftershow', this._onAfterShow.bind(this));
+        this._onBeforeHide && this.addEventListener('beforehide', this._onBeforeHide.bind(this));
+        this._onAfterHide && this.addEventListener('afterhide', this._onAfterHide.bind(this));
 
-        welcomeLabel = new Label("welcomeLabel", "Welcome to your first TAL application!");
-        this.appendChildWidget(welcomeLabel);
+      },
 
-        var newCarouselButton = this._createCarouselButton();
+      _onLoad: function (evt) {
+        var self, LectusTvLabel, LogoLabel, carouselButtonLabel, verticalListMenu;
 
-        var playerButton = new Button();
-        playerButton.addEventListener("select", function(evt){
-          self.getCurrentApplication().pushComponent("maincontainer", "sampleapp/appui/components/simplevideocomponent");
+        self = this;
+
+        var container = new ComponentContainer("logincomponent");
+
+        LogoLabel = new Label("LogoLabel", "");
+        
+        /** Login Option **/
+        var args = {test : 'testing'};
+        var LoginButton = new Button("LoginButton");
+        LoginButton.addEventListener("select", function(evt){
+          self.getCurrentApplication().pushComponent("maincontainer", "sampleapp/appui/components/logincomponent");
         });
-        playerButton.appendChildWidget(new Label("Simple Video Player Example"));
+        LoginButton.appendChildWidget(new Label("Login"));
+        LoginButton.setDataItem(args);
 
-        var horizontalProgressButton = new Button();
-        horizontalProgressButton.appendChildWidget(new Label("Horizontal Progress Bar Example"));
-        horizontalProgressButton.addEventListener("select", function(evt) {
-          self.getCurrentApplication().pushComponent("maincontainer", "sampleapp/appui/components/horizontalprogresscomponent");
+        /** Settings Option **/
+        var settingButton = new Button("settingButton");
+        settingButton.addEventListener("select", function(evt){
+          self.getCurrentApplication().pushComponent("maincontainer", "sampleapp/appui/components/settingcomponent");
         });
+        settingButton.appendChildWidget(new Label("Settings"));
 
         // Create a vertical list and append the buttons to navigate within the list
         verticalListMenu = new VerticalList("mainMenuList");
-        verticalListMenu.appendChildWidget(newCarouselButton);
-        verticalListMenu.appendChildWidget(playerButton);
-        verticalListMenu.appendChildWidget(horizontalProgressButton);
+        verticalListMenu.appendChildWidget(LogoLabel);
+        verticalListMenu.appendChildWidget(LoginButton);
+        verticalListMenu.appendChildWidget(settingButton);
         this.appendChildWidget(verticalListMenu);
 
         // calls Application.ready() the first time the component is shown
         // the callback removes itself once it's fired to avoid multiple calls.
-        this.addEventListener("aftershow", function appReady(evt) {
+        this.addEventListener("aftershow", function appReady(evt){
           self.getCurrentApplication().ready();
           self.removeEventListener('aftershow', appReady);
+
+          /** Managing Sessions **/
+          var user = localStorage.getItem("user");
+          var password = localStorage.getItem("password");
+
+          if(user == "anmolsaini" && password == "admin")
+          {
+            self.getCurrentApplication().pushComponent("maincontainer", "sampleapp/appui/components/homecomponent");
+          }
+          else
+          {
+            self.getCurrentApplication().pushComponent("maincontainer", "sampleapp/appui/components/simple");
+          }
         });
+      },           
+      
+      _onBeforeRender: function (evt) {
+        evt.stopPropagation();
       },
 
-      _createCarouselButton: function () {
-        var self = this;
-        function carouselExampleSelected() {
-          self.getCurrentApplication().pushComponent(
-            "maincontainer",
-            "sampleapp/appui/components/carouselcomponent",
-            self._getCarouselConfig()
-          );
-        }
-
-        var button = new Button('carouselButton');
-        button.appendChildWidget(new Label("Carousel Example"));
-        button.addEventListener('select', carouselExampleSelected);
-        return button;
+      _onAfterShow: function (evt) {
+        evt.stopPropagation();
       },
 
-      _getCarouselConfig: function () {
-        return {
-          description: "Carousel example, LEFT and RIGHT to navigate, SELECT to go back",
-          dataSource: new DataSource(null, new SimpleFeed(), 'loadData'),
-          formatter: new SimpleFormatter(),
-          orientation: Carousel.orientations.HORIZONTAL,
-          carouselId: 'verticalCullingCarousel',
-          animOptions: {
-            skipAnim: false
-          },
-          alignment: {
-            normalisedAlignPoint: 0.5,
-            normalisedWidgetAlignPoint: 0.5
-          },
-          initialItem: 4,
-          type: "CULLING",
-          lengths: 264
-        };
+      _onBeforeHide: function (evt) {
+        evt.stopPropagation();
       }
     });
   }

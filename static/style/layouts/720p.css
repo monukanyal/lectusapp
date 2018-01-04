@@ -31,21 +31,21 @@
     height: 720px;
     top: 50%;
     margin: -360px auto 0 auto;
-    background-image: url(../../img/bbc_background_720.png);
+    /*background-image: url(../../img/bbc_background_720.png);*/
 }
 
-#helloWorldLabel, #welcomeLabel {
+#LectusTvLabel, #LogoLabel {
     display: block;
     text-align: center;
 }
 
-#helloWorldLabel {
+#LectusTvLabel {
     font-size: 60px;
     padding-top: 228px;
     font-weight: bold;
 }
 
-#welcomeLabel {
+#LogoLabel {
     font-size: 26px;
 }
 
